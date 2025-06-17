@@ -1,0 +1,100 @@
+body {
+  background: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.text-center {
+  margin-top: 40px;
+}
+.mt-4 {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+}
+#azureForm {
+  background: #fff;
+  padding: 2rem 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+#azureInput {
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: .5rem;
+  width: 220px;
+  transition: border 0.2s;
+  &:focus {
+    border: 1.5px solid #2563eb;
+    outline: none;
+  }
+}
+button[type="submit"] {
+  background: linear-gradient(90deg, #2563eb 0%, #60a5fa 100%);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.5rem;
+  font-size: .6rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+  &:hover {
+    background: linear-gradient(90deg, #1d4ed8 0%, #3b82f6 100%);
+    transform: translateY(-2px) scale(1.03);
+  }
+}
+
+.arrow-right {
+  position: absolute;
+  top: 50%;
+  right: -20px;
+  width: 40px;
+  height: 20px;
+  transform: translateY(-50%);
+}
+
+.arrow-right::after {
+  content: "→";
+  font-size: 30px;
+  color: #6c757d;
+}
+
+.arrow-left {
+  position: absolute;
+  top: 50%;
+  left: -20px;
+  width: 40px;
+  height: 20px;
+  transform: translateY(-50%);
+}
+
+.arrow-left::after {
+  content: "←";
+  font-size: 30px;
+  color: #6c757d;
+}
+
+.card {
+  transition: transform 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px; /* Vertically center the text there */
+}
+
