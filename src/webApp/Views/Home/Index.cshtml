@@ -14,23 +14,47 @@
                 <div class="card-header bg-primary text-white">
                     Azure Function
                 </div>
-                <div class="card-body d-flex flex-column">
-                    <textarea class="form-control mb-3 flex-grow-1" rows="4" placeholder="Enter message"></textarea>
-                    <button class="btn btn-primary w-100">Wyślij do Event Grid</button>
-                </div>
+                <form asp-controller="Home" asp-action="SendToEventGrid" method="post" class="card-body d-flex flex-column">
+                    <textarea class="form-control mb-3 flex-grow-1" rows="4" name="message" placeholder="Enter message"></textarea>
+                    <button class="btn btn-primary w-100">Send to Event Grid</button>
+                </form>
             </div>
-            <!-- Strzałka w prawo -->
+            <!-- Arrow  -->
             <div class="arrow-right d-none d-md-block"></div>
         </div>
 
+        <!-- Event grid Container -->
+        <div class="col-md-4 text-center position-relative d-flex flex-column">
+            <div class="card shadow-sm rounded-4 h-100">
+                <div class="card-header bg-success text-white">
+                    Event Grid
+                </div>
+                <div class="card-body d-flex flex-column justify-content-center">
+                    <p class="mb-0">Processing in event grid</p>
+                </div>
+            </div>
+            <!-- Arrow  -->
+            <div class="arrow-right d-none d-md-block"></div>
+        </div>
         <!-- CosmosDB Container -->
         <div class="col-md-4 text-center position-relative d-flex flex-column">
             <div class="card shadow-sm rounded-4 h-100">
                 <div class="card-header bg-success text-white">
-                    Cosmos
+                    CosmosDB
                 </div>
                 <div class="card-body d-flex flex-column justify-content-center">
-                    <p class="mb-0">Dane zostały wysłane do bazy CosmosDB</p>
+                    <p class="mb-0">Saving in Cosmos DB</p>
+                </div>
+            </div>
+        </div>
+        <!-- CosmosDB Container -->
+        <div class="col-md-4 text-center position-relative d-flex flex-column">
+            <div class="card shadow-sm rounded-4 h-100">
+                <div class="card-header bg-success text-white">
+                    Retrieving from CosmosDB
+                </div>
+                <div class="card-body d-flex flex-column justify-content-center">
+                    <p class="mb-0">Saving in Cosmos DB</p>
                 </div>
             </div>
         </div>

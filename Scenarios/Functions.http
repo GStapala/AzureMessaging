@@ -1,0 +1,5 @@
+﻿POST {{functionHost}}/api/SendTextToEventGrid
+
+{
+  "text": "Hello, Event Grid!"
+}
