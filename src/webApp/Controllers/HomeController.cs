@@ -54,5 +54,16 @@ namespace WebApp.Controllers
             _logger.LogError($"Failed to send data to Azure Function: {response.ReasonPhrase}");
             return Json(new { success = false, message = "Failed to send data to backend." });
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> MessageFromEventGrid(string message)
+        {
+            // Handle the message from Event Grid
+            _logger.LogInformation($"Received message from Event Grid: {message}");
+            return Json(new { success = true, message = "Message received from Event Grid." });
+        }
+        
+        
     }
 }
