@@ -37,7 +37,7 @@ public class SendTextToEventGrid(ILogger<SendTextToEventGrid> logger)
         var eventGridEvent = new EventGridEvent(
             eventType: "EventGrid.CustomEvent",
             subject: "az204",
-            data: JsonConvert.DeserializeObject(message),
+            data: message,
             dataVersion: "1.0"
         );
         

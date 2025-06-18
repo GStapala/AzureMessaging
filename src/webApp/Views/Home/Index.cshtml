@@ -14,10 +14,11 @@
                 <div class="card-header bg-primary text-white">
                     Azure Function
                 </div>
-                <form asp-controller="Home" asp-action="SendToEventGrid" method="post" class="card-body d-flex flex-column">
-                    <textarea class="form-control mb-3 flex-grow-1" rows="4" name="message" placeholder="Enter message"></textarea>
-                    <button class="btn btn-primary w-100">Send to Event Grid</button>
-                </form>
+                <div id="responseMessage" class="alert alert-info" style="display: none;"></div>
+                <div class="card-body d-flex flex-column">
+                    <textarea id="messageEventGrid" class="form-control mb-3 flex-grow-1" rows="4" name="message" placeholder="Enter message"></textarea>
+                    <button id="sendEventGrid" class="btn btn-primary w-100">Send to Event Grid</button>
+                </div>
             </div>
             <!-- Arrow  -->
             <div class="arrow-right d-none d-md-block"></div>
@@ -60,3 +61,28 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById("sendEventGrid").addEventListener("click", async function (e) {
+        const message = document.getElementById("messageEventGrid").value;
+
+        const response = await fetch("/Home/SendToEventGrid", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(message)
+        });
+
+        const result = await response.json();
+        const responseMessageDiv = document.getElementById("responseMessage");
+
+        if (result.success) {
+            responseMessageDiv.textContent = result.message;
+            responseMessageDiv.style.display = "block";
+        } else {
+            responseMessageDiv.textContent = "Failed to send data.";
+            responseMessageDiv.style.display = "block";
+        }
+    });
+</script>

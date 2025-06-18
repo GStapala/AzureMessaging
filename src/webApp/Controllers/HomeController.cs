@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -37,21 +38,27 @@ namespace WebApp.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SendToEventGrid([FromForm] string message)
+        public async Task<IActionResult> SendToEventGrid([FromBody] string message)
         {
-            //Send to azure function by httpClient 
+            if (message == null)
+                return Json(new { success = false, message = "Message cannot be null." });
+                
             using var httpClient = new HttpClient();
             var content = new StringContent(message, System.Text.Encoding.UTF8, "application/json");
-            var url = _configuration["AzureFunctions:Url"];
+            try
+            {
+                var response = await httpClient.PostAsync($"{_configuration["AzureFunctions:Url"]}/api/SendTextToEventGrid?code={_configuration["AzureFunctions:Key"]}", content);
+                if (response.IsSuccessStatusCode)
+                    return Json(new { success = true, message = "Data sent to backend." });
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Failed to send data to Azure Function: {e.Message}");
+                return Json(new { success = false, message = "Failed to send data to backend." });
+            }
             
-            var response = await httpClient.PostAsync($"{url}/api/SendTextToEventGrid", content);
-            if (response.IsSuccessStatusCode) 
-                return Json(new { success = true, message = "Data sent to backend." });
-                
-            _logger.LogError($"Failed to send data to Azure Function: {response.ReasonPhrase}");
             return Json(new { success = false, message = "Failed to send data to backend." });
         }
 
@@ -63,7 +70,5 @@ namespace WebApp.Controllers
             _logger.LogInformation($"Received message from Event Grid: {message}");
             return Json(new { success = true, message = "Message received from Event Grid." });
         }
-        
-        
     }
 }
