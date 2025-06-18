@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Azure.Messaging.EventGrid;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -62,13 +63,31 @@ namespace WebApp.Controllers
             return Json(new { success = false, message = "Failed to send data to backend." });
         }
 
-        [HttpGet]
+        [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> MessageFromEventGrid(string message)
+        // Endpoint as a webhook for Event Grid
+        public async Task<IActionResult> MessageFromEventGrid()
         {
-            // Handle the message from Event Grid
-            _logger.LogInformation($"Received message from Event Grid: {message}");
-            return Json(new { success = true, message = "Message received from Event Grid." });
+            var req = HttpContext.Request;
+            _logger.LogInformation($"Received message from Event Grid:");
+
+            BinaryData events = await BinaryData.FromStreamAsync(req.Body);
+            _logger.LogInformation($"Received events: {events}");
+            
+            EventGridEvent[] eventGridEvents = EventGridEvent.ParseMany(events);
+            foreach (EventGridEvent eventGridEvent in eventGridEvents)
+            {
+                // Handle system events
+                if (eventGridEvent.EventType == "EventGrid.CustomEvent")
+                {
+                    var eventData = eventGridEvent.Data.ToString();
+                    _logger.LogInformation($"Got event from azure event hub {eventData}");
+                    
+                }
+            }
+                
+            _logger.LogInformation($"Received message from Event Grid:");
+            return Ok();
         }
     }
 }
