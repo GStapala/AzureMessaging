@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Azure.Messaging.EventGrid;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using WebApp.Models;
@@ -16,11 +17,13 @@ namespace WebApp.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IConfiguration _configuration;
+        private readonly IHubContext<EventGridNotificationHub> _hubContext;
 
-        public HomeController(ILogger<HomeController> logger, IConfiguration configuration)
+        public HomeController(ILogger<HomeController> logger, IConfiguration configuration, IHubContext<EventGridNotificationHub> hubContext)
         {
             _logger = logger;
             _configuration = configuration;
+            _hubContext = hubContext;
         }
 
         public IActionResult Index()
@@ -77,11 +80,11 @@ namespace WebApp.Controllers
             EventGridEvent[] eventGridEvents = EventGridEvent.ParseMany(events);
             foreach (EventGridEvent eventGridEvent in eventGridEvents)
             {
-                // Handle system events
                 if (eventGridEvent.EventType == "EventGrid.CustomEvent")
                 {
                     var eventData = eventGridEvent.Data.ToString();
                     _logger.LogInformation($"Got event from azure event hub {eventData}");
+                    await _hubContext.Clients.All.SendAsync("ReceiveMessage", eventData);
                     
                 }
             }
