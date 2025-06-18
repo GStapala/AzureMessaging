@@ -8,24 +8,38 @@
 
 <div class="container mt-5">
     <div class="row justify-content-center align-items-stretch"> 
-        <!-- Azure Function Container -->
+        <!-- Web app -->
         <div class="col-md-4 text-center position-relative d-flex flex-column">
             <div class="card shadow-sm rounded-4 h-100">
                 <div class="card-header bg-primary text-white">
-                    Azure Function
+                    WebApp
                 </div>
                 <div id="responseMessage" class="alert alert-info" style="display: none;"></div>
                 <div class="card-body d-flex flex-column">
                     <textarea id="messageEventGrid" class="form-control mb-3 flex-grow-1" rows="4" name="message" placeholder="Enter message"></textarea>
-                    <button id="sendEventGrid" class="btn btn-primary w-100">Send to Event Grid</button>
+                    <button id="sendEventGrid" class="btn btn-primary w-100">Send to Azure function</button>
+                </div>
+            </div>
+            <!-- Arrow  -->
+            <div class="arrow-right d-none d-md-block"></div>
+        </div>
+        
+        <!-- Azure Func -->
+        <div class="col-md-2 text-center position-relative d-flex flex-column">
+            <div class="card shadow-sm rounded-4 h-100">
+                <div class="card-header bg-primary bg-gradient text-white">
+                    Azure Function
+                </div>
+                <div class="card-body d-flex flex-column justify-content-center">
+                    <p class="mb-0">Azure Function processing/validation</p>
                 </div>
             </div>
             <!-- Arrow  -->
             <div class="arrow-right d-none d-md-block"></div>
         </div>
 
-        <!-- Event grid Container -->
-        <div class="col-md-4 text-center position-relative d-flex flex-column">
+        <!-- Event grid  -->
+        <div class="col-md-2 text-center position-relative d-flex flex-column">
             <div class="card shadow-sm rounded-4 h-100">
                 <div class="card-header bg-success text-white">
                     Event Grid
@@ -37,7 +51,7 @@
             <!-- Arrow  -->
             <div class="arrow-right d-none d-md-block"></div>
         </div>
-        <!-- WebApp Container -->
+        <!-- WebApp SignalR -->
         <div class="col-md-4 text-center position-relative d-flex flex-column">
             <div class="card shadow-sm rounded-4 h-100">
                 <div class="card-header bg-success bg-gradient text-white">
@@ -49,17 +63,17 @@
                 </div>
             </div>
         </div>
-        <!-- CosmosDB Container -->
-        <div class="col-md-4 text-center position-relative d-flex flex-column">
-            <div class="card shadow-sm rounded-4 h-100">
-                <div class="card-header bg-success text-white">
-                    Retrieving from CosmosDB
-                </div>
-                <div class="card-body d-flex flex-column justify-content-center">
-                    <p class="mb-0">Saving in Cosmos DB</p>
-                </div>
-            </div>
-        </div>
+        @* <!-- CosmosDB Container --> *@
+        @* <div class="col-md-4 text-center position-relative d-flex flex-column"> *@
+        @*     <div class="card shadow-sm rounded-4 h-100"> *@
+        @*         <div class="card-header bg-success text-white"> *@
+        @*             Retrieving from CosmosDB *@
+        @*         </div> *@
+        @*         <div class="card-body d-flex flex-column justify-content-center"> *@
+        @*             <p class="mb-0">Saving in Cosmos DB</p> *@
+        @*         </div> *@
+        @*     </div> *@
+        @* </div> *@
     </div>
 </div>
 

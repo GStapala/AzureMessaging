@@ -13,19 +13,9 @@ using WebApp.Models;
 namespace WebApp.Controllers
 {
     [Authorize]
-    public class HomeController : Controller
+    public class HomeController(ILogger<HomeController> logger, IConfiguration configuration, IHubContext<EventGridNotificationHub> hubContext)
+        : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        private readonly IConfiguration _configuration;
-        private readonly IHubContext<EventGridNotificationHub> _hubContext;
-
-        public HomeController(ILogger<HomeController> logger, IConfiguration configuration, IHubContext<EventGridNotificationHub> hubContext)
-        {
-            _logger = logger;
-            _configuration = configuration;
-            _hubContext = hubContext;
-        }
-
         public IActionResult Index()
         {
             return View();
@@ -53,13 +43,13 @@ namespace WebApp.Controllers
             var content = new StringContent(message, System.Text.Encoding.UTF8, "application/json");
             try
             {
-                var response = await httpClient.PostAsync($"{_configuration["AzureFunctions:Url"]}/api/SendTextToEventGrid?code={_configuration["AzureFunctions:Key"]}", content);
+                var response = await httpClient.PostAsync($"{configuration["AzureFunctions:Url"]}/api/SendTextToEventGrid?code={configuration["AzureFunctions:Key"]}", content);
                 if (response.IsSuccessStatusCode)
                     return Json(new { success = true, message = "Data sent to backend." });
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Failed to send data to Azure Function: {e.Message}");
+                logger.LogError(e, $"Failed to send data to Azure Function: {e.Message}");
                 return Json(new { success = false, message = "Failed to send data to backend." });
             }
             
@@ -72,24 +62,20 @@ namespace WebApp.Controllers
         public async Task<IActionResult> MessageFromEventGrid()
         {
             var req = HttpContext.Request;
-            _logger.LogInformation($"Received message from Event Grid:");
-
-            BinaryData events = await BinaryData.FromStreamAsync(req.Body);
-            _logger.LogInformation($"Received events: {events}");
+            var events = await BinaryData.FromStreamAsync(req.Body);
+            logger.LogInformation($"Received events: {events}");
             
-            EventGridEvent[] eventGridEvents = EventGridEvent.ParseMany(events);
-            foreach (EventGridEvent eventGridEvent in eventGridEvents)
+            var eventGridEvents = EventGridEvent.ParseMany(events);
+            foreach (var eventGridEvent in eventGridEvents)
             {
                 if (eventGridEvent.EventType == "EventGrid.CustomEvent")
                 {
                     var eventData = eventGridEvent.Data.ToString();
-                    _logger.LogInformation($"Got event from azure event hub {eventData}");
-                    await _hubContext.Clients.All.SendAsync("ReceiveMessage", eventData);
+                    await hubContext.Clients.All.SendAsync("ReceiveMessage", eventData);
                     
                 }
             }
                 
-            _logger.LogInformation($"Received message from Event Grid:");
             return Ok();
         }
     }
