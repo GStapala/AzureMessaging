@@ -37,14 +37,15 @@
             <!-- Arrow  -->
             <div class="arrow-right d-none d-md-block"></div>
         </div>
-        <!-- CosmosDB Container -->
+        <!-- WebApp Container -->
         <div class="col-md-4 text-center position-relative d-flex flex-column">
             <div class="card shadow-sm rounded-4 h-100">
-                <div class="card-header bg-success text-white">
-                    CosmosDB
+                <div class="card-header bg-success bg-gradient text-white">
+                    WebApp - SignalR
                 </div>
                 <div class="card-body d-flex flex-column justify-content-center">
-                    <p class="mb-0">Saving in Cosmos DB</p>
+                    <p class="mb-0">Messages from webhook - passed by signalR</p>
+                    <div id="messagesContainer"></div>
                 </div>
             </div>
         </div>
@@ -62,6 +63,7 @@
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
 <script>
     document.getElementById("sendEventGrid").addEventListener("click", async function (e) {
         const message = document.getElementById("messageEventGrid").value;
@@ -85,4 +87,29 @@
             responseMessageDiv.style.display = "block";
         }
     });
+
+
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/eventGridNotificationHub")
+        .configureLogging(signalR.LogLevel.Information)
+        .build();
+
+    connection.on("ReceiveMessage", (message) => {
+        console.log("Message recieved:", message);
+        const messageElement = document.createElement("div");
+        messageElement.textContent = message;
+        document.getElementById("messagesContainer").appendChild(messageElement);
+    });
+
+    async function start() {
+        try {
+            await connection.start();
+        } catch (err) {
+            console.log(err);
+            setTimeout(start, 5000);
+        }
+    };
+
+    start();
+
 </script>

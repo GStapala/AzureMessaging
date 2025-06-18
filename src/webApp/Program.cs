@@ -31,10 +31,12 @@ builder.Services.AddRazorPages()
     .AddMicrosoftIdentityUI();
 
 builder.Services.AddApplicationInsightsTelemetry();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 app.UseSerilogRequestLogging();
 app.UseMiddleware<ExceptionMiddleware>();
+app.MapHub<EventGridNotificationHub>("/eventGridNotificationHub");
 
 if (!app.Environment.IsProduction())
 {

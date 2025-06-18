@@ -1,0 +1,13 @@
+﻿POST https://{{host}}/Home/MessageFromEventGrid
+
+[
+  {
+    "id": "60f72aee-64e0-4c37-a7e9-cfc5419bae8d",
+    "subject": "az204",
+    "data": "SomeMessage",
+    "eventType": "EventGrid.CustomEvent",
+    "dataVersion": "1.0",
+    "metadataVersion": "1",
+    "eventTime": "2025-06-18T17:08:57.063758Z",
+  }
+]
