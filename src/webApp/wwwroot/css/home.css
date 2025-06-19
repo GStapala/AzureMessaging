@@ -90,4 +90,24 @@ body {
   line-height: 60px;
   /* Vertically center the text there */
 }
+.bg-green-100 {
+  background-color: #e6f4ea;
+  /* Very light green */
+}
+.bg-green-200 {
+  background-color: #99d3ab;
+  /* Medium light green */
+}
+.bg-green-300 {
+  background-color: #33a757;
+  /* Medium dark green */
+}
+.bg-green-400 {
+  background-color: #297f44;
+  /* Very dark green */
+}
+.bg-green-500 {
+  background-color: #0b4c2b;
+  /* Deep green */
+}
 /*# sourceMappingURL=home.css.map */
