@@ -9,6 +9,8 @@ using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using Serilog;
 using WebApp.AzureCreators;
+using WebApp.BackgroundWorkers;
+using WebApp.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,11 +52,16 @@ builder.Services.AddScoped<IAzureCreator>(provider =>
     }
 );
 
+builder.Services.AddSingleton<ServiceBusQueueReceiverService>();
+builder.Services.AddHostedService(sp => sp.GetRequiredService<ServiceBusQueueReceiverService>());
+builder.Services.AddSingleton<IMessageReader>(sp => sp.GetRequiredService<ServiceBusQueueReceiverService>());
+
 
 var app = builder.Build();
 app.UseSerilogRequestLogging();
 app.UseMiddleware<ExceptionMiddleware>();
 app.MapHub<EventGridNotificationHub>("/eventGridNotificationHub");
+app.MapHub<AzureServiceBusNotificationHub>("/azureServiceBusNotificationHub");
 
 if (!app.Environment.IsProduction())
 {

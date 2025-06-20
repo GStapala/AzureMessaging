@@ -13,7 +13,6 @@
 ]
 
 ###
-// Get Index
 GET https://{{host}}/Home/Index
 UsePowerShell: true
-Cookie:
+Cookie: {{cookie}}

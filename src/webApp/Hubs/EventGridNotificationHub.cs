@@ -1,10 +1,5 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 
-public class EventGridNotificationHub : Hub
-{
-    public async Task SendMessage(string message)
-    {
-        await Clients.All.SendAsync("ReceiveMessage", message);
-    }
-}
+namespace WebApp.Hubs;
+
+public class EventGridNotificationHub : Hub;
