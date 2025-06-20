@@ -4,7 +4,7 @@
      <TargetFramework>net9.0</TargetFramework>
     <WebProject_DirectoryAccessLevelKey>0</WebProject_DirectoryAccessLevelKey>
     <UserSecretsId>0a38413c-083e-4e45-910f-0b8e6bdd3d5e</UserSecretsId>
-    <RootNamespace>WebApp-OpenIDConnect-DotNet</RootNamespace>
+    <RootNamespace>WebApp</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

@@ -11,3 +11,9 @@
     "eventTime": "2025-06-18T17:08:57.063758Z",
   }
 ]
+
+###
+// Get Index
+GET https://{{host}}/Home/Index
+UsePowerShell: true
+Cookie:

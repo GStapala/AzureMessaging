@@ -1,12 +1,14 @@
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using Serilog;
+using WebApp.AzureCreators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +34,22 @@ builder.Services.AddRazorPages()
 
 builder.Services.AddApplicationInsightsTelemetry();
 builder.Services.AddSignalR();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<PowerShellAzureCreator>();
+builder.Services.AddScoped<SDKAzureCreator>();
+builder.Services.AddScoped<IAzureCreator>(provider =>
+    {
+        var httpContextAccessor = provider.GetRequiredService<IHttpContextAccessor>();
+        var httpContext = httpContextAccessor.HttpContext;
+        var useAzureSdk = httpContext != null && httpContext.Request.Headers["AzureSDK"] == "true";
+
+        return useAzureSdk
+            ? provider.GetRequiredService<SDKAzureCreator>()
+            : provider.GetRequiredService<PowerShellAzureCreator>();
+    }
+);
+
 
 var app = builder.Build();
 app.UseSerilogRequestLogging();

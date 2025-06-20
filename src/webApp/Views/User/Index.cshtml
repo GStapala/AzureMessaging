@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = User.Identity?.Name;
+}
+
+<div class="text-center">
+    Hey @User.Identity?.Name
+</div>
+
+<h4>User can access some resources</h4>
+<div class="container mt-4">
+    <table class="table table-bordered text-center">
+        <thead class="table-light">
+        <tr>
+            <th>Get Data</th>
+            <th>Azure Function</th>
+            <th>Event Grid</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><button class="btn btn-primary">Create ResourceGroup</button></td>
+            <td><button class="btn btn-primary">Create AzureFunction</button></td>
+            <td><button class="btn btn-primary">Create EventGrid</button></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
